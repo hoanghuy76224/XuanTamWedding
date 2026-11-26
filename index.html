@@ -1517,6 +1517,78 @@
   window.dispatchEvent(new Event("weddingdb-ready"));
 </script>
 
+<style id="admQk">
+.admin-root{background:#fbf6f3!important;color:#2b2326!important;font-family:'Archivo',system-ui,sans-serif}
+.admin-root .adm-gate{border-color:#efe3de;border-radius:18px;box-shadow:0 14px 40px rgba(120,50,70,.10)}
+.admin-root .adm-gate h2{color:#2b2326;font-family:'Fraunces',serif}
+.admin-root .adm-gate button{background:#b23a52;border-radius:12px}
+.admin-root .adm-gate input:focus{border-color:#b23a52;box-shadow:0 0 0 3px rgba(178,58,82,.18)}
+.admin-root .adm-back{color:#8c7a78}
+.qk{max-width:560px;margin:0 auto;padding:18px 14px 70px}
+.qk-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:6px 2px 16px}
+.qk-top h1{font-family:'Fraunces',serif;font-weight:600;font-size:27px;line-height:1.15;color:#2b2326}
+.qk-top .sub{font-size:12.5px;color:#8c7a78;margin-top:4px}
+.qk-round{width:42px;height:42px;border-radius:50%;border:1px solid #eadfda;background:#fff;color:#2b2326;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;font-size:17px;flex:none}
+.qk-tabs{display:flex;gap:4px;background:#f3ebe7;border:1px solid #eadfda;border-radius:16px;padding:6px;margin-bottom:16px}
+.qk-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 6px;border-radius:12px;font-size:14px;color:#6b5b5a;cursor:pointer;border:0;background:none;font-family:inherit;white-space:nowrap}
+.qk-tab svg{width:17px;height:17px;flex:none}
+.qk-tab.on{background:#fff;color:#2b2326;font-weight:600;box-shadow:0 1px 3px rgba(80,40,40,.08)}
+.qk-pane{display:none}.qk-pane.on{display:block}
+.qk-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}
+.qk-card{background:#fff;border:1px solid #efe3de;border-radius:16px;padding:16px 16px 14px}
+.qk-card .lb{display:flex;align-items:center;gap:8px;font-size:14px;color:#8a4a58}
+.qk-card .lb svg{width:18px;height:18px;color:#b23a52;flex:none}
+.qk-card .v{margin-top:10px;font-size:34px;font-weight:700;line-height:1;color:#2b2326}
+.qk-card .v small{font-size:15px;font-weight:400;color:#8c7a78;margin-left:6px}
+.qk-h{font-family:'Fraunces',serif;font-size:17px;font-weight:600;margin:4px 2px 8px;color:#2b2326}
+.qk-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:#7a6a69;margin:0 2px 12px}
+.qk-legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+.qk-rows{background:#fff;border:1px solid #efe3de;border-radius:16px;overflow:hidden;margin-bottom:20px}
+.qk-row{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid #f1e7e3;padding:16px 18px;cursor:pointer;font-family:inherit;color:inherit}
+.qk-row:last-child{border-bottom:0}
+.qk-row:active{background:#faf3f0}
+.qk-row .t{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:16px;font-weight:600}
+.qk-row .t em{font-style:normal;font-weight:400;font-size:15px;color:#4b3f3e}
+.qk-row .d{font-size:12.5px;color:#8c7a78;margin:3px 0 10px}
+.qk-bar{height:9px;border-radius:9px;background:#e9e3e0;overflow:hidden}
+.qk-bar b{display:block;height:100%;border-radius:9px;width:0;transition:width .5s}
+.qk-bar.g b{background:#0e9f6e}.qk-bar.r b{background:#e5446d}.qk-bar.n b{background:#b9aeaa}
+.qk-btn{font-family:inherit;font-size:13.5px;padding:10px 16px;border-radius:12px;border:1px solid #b23a52;background:#fff;color:#b23a52;cursor:pointer;text-decoration:none;display:inline-block}
+.qk-btn.solid{background:#b23a52;color:#fff}
+.qk-btn:disabled{opacity:.6}
+.qk-tools{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:0 2px 12px}
+.qk-chips{display:flex;gap:8px;flex-wrap:wrap}
+.qk-chip{font-size:13px;padding:8px 14px;border-radius:20px;border:1px solid #eadfda;background:#fff;cursor:pointer;color:#6b5b5a}
+.qk-chip.on{background:#b23a52;border-color:#b23a52;color:#fff}
+.qk-invite{background:#fff;border:1px solid #efe3de;border-radius:16px;padding:16px;margin-bottom:16px}
+.qk-invite h3{font-family:'Fraunces',serif;font-size:16px;margin-bottom:4px}
+.qk-invite p{font-size:12.5px;color:#8c7a78;margin-bottom:12px}
+.qk-invite .row{display:flex;gap:8px;flex-wrap:wrap}
+.qk-invite input{flex:1;min-width:180px;font-size:16px;padding:11px 13px;border:1px solid #eadfda;border-radius:12px;outline:none;font-family:inherit;background:#fffdfc}
+.qk-invite input:focus{border-color:#b23a52}
+.qk-out{display:none;margin-top:12px}.qk-out.on{display:block}
+.qk-lk{font-size:13px;background:#faf3f0;border:1px solid #efe3de;border-radius:12px;padding:11px 13px;word-break:break-all;color:#8a4a58}
+.qk-saved{margin-top:12px;border-top:1px solid #f1e7e3;padding-top:10px}
+.qk-saved-hd{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:#8c7a78;margin-bottom:6px;gap:8px;flex-wrap:wrap}
+.qk-si{display:flex;gap:8px;align-items:center;padding:9px 0;border-bottom:1px dashed #f1e7e3}
+.qk-si:last-child{border-bottom:0}
+.qk-si .nm{flex:1;min-width:0}.qk-si .nm b{display:block;font-size:14px}
+.qk-si .nm span{display:block;font-size:11.5px;color:#9a8886;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qk-mini{font-size:12px;padding:6px 10px;border-radius:9px;border:1px solid #b23a52;background:#fff;color:#b23a52;cursor:pointer;font-family:inherit;white-space:nowrap}
+.qk-mini.x{border-color:#ecc7cd;color:#c0364f}
+.qk-tag{display:inline-block;font-size:11.5px;padding:3px 10px;border-radius:12px;white-space:nowrap}
+.qk-tag.yes{background:#e1f4ec;color:#0b7a55}.qk-tag.no{background:#fde3ea;color:#c0364f}.qk-tag.nr{background:#eeeae8;color:#7a6a69}
+.qk-item{background:#fff;border:1px solid #efe3de;border-radius:16px;padding:14px 16px;margin-bottom:10px}
+.qk-item .hd{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.qk-item .nm{font-size:15.5px;font-weight:600;word-break:break-word}
+.qk-item .nm small{display:block;font-weight:400;font-size:12px;color:#8c7a78;margin-top:2px}
+.qk-item .mt{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px;font-size:12.5px;color:#8c7a78}
+.qk-item .wish{margin-top:8px;font-size:14.5px;line-height:1.55;white-space:pre-wrap;word-break:break-word;color:#3b3032}
+.qk-del{color:#c0364f;background:none;border:0;cursor:pointer;font-size:12.5px;padding:4px 8px;border-radius:8px;font-family:inherit}
+.qk-del:active{background:#fde3ea}
+.qk-empty{padding:34px 10px;text-align:center;color:#8c7a78;font-size:13.5px}
+.qk-note{font-size:12px;color:#9a8886;margin:6px 2px 0}
+</style>
 <!-- ============ ADMIN (mở bằng #admin ở cuối link) ============ -->
 <div class="admin-root" id="adminRoot">
   <div class="adm-wrap">
@@ -1529,48 +1601,62 @@
       <a class="adm-back" href="#">← Về thiệp</a>
     </div>
     <div class="adm-app" id="admApp">
-      <div class="adm-top">
-        <div>
-          <h1>Quản trị thiệp cưới</h1>
-          <div class="adm-sub">Thanh Xuân &amp; Văn Tam · 26.12.2026 · Luxury Palace</div>
+      <div class="qk">
+        <div class="qk-top">
+          <div>
+            <h1>Quản lý khách mời</h1>
+            <div class="sub">Thanh Xuân &amp; Văn Tam · 26.12.2026</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="qk-round" id="admReload" title="Tải lại">↻</button>
+            <a class="qk-round" href="#" title="Về thiệp">⌂</a>
+          </div>
         </div>
-        <div class="adm-actions">
-          <button class="adm-btn" id="admReload">↻ Tải lại</button>
-          <button class="adm-btn solid" id="admCsv">⬇ Xuất CSV</button>
-          <a class="adm-btn" href="#">Về thiệp</a>
+        <div class="qk-tabs" id="qkTabs">
+          <button class="qk-tab on" data-t="ov"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><path d="M14 17h6M17 14v6"/></svg>Tổng quan</button>
+          <button class="qk-tab" data-t="gs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M16 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c1.9.6 3.1 2.2 3.5 5.2"/></svg>Khách mời</button>
+          <button class="qk-tab" data-t="ws"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v9a1.5 1.5 0 0 1-1.5 1.5H10l-4.5 4v-4H5.5A1.5 1.5 0 0 1 4 14.5z"/></svg>Lời chúc</button>
         </div>
-      </div>
-      <div class="adm-stats" id="admStats"></div>
 
-      <div class="adm-invite">
-        <h3>Tạo link mời có tên khách</h3>
-        <p>Nhập tên khách để tạo link thiệp cá nhân hóa, không cần đăng nhập Google. Danh sách link tạo ra được lưu trên máy này.</p>
-        <div class="adm-invite-row">
-          <input type="text" id="admGuestFor" placeholder="Tên khách (vd: Anh Minh &amp; gia đình)" maxlength="80">
-          <button class="adm-btn solid" id="admMkLink">Tạo link</button>
+        <div class="qk-pane on" id="qkOv">
+          <div class="qk-grid" id="qkStats"></div>
+          <div class="qk-h">Theo trạng thái</div>
+          <div class="qk-legend"><span><i style="background:#0e9f6e"></i>Sẽ tham dự</span><span><i style="background:#e5446d"></i>Không tham dự</span><span><i style="background:#d9d2cf"></i>Chưa trả lời</span></div>
+          <div class="qk-rows" id="qkRows"></div>
         </div>
-        <div class="adm-invite-out" id="admLinkOut">
-          <div class="adm-lk" id="admLinkText"></div>
-          <button class="adm-btn" id="admCopyLink" style="margin-top:8px">Sao chép</button>
+
+        <div class="qk-pane" id="qkGs">
+          <div class="qk-invite">
+            <h3>Tạo link mời có tên khách</h3>
+            <p>Nhập tên khách để tạo link thiệp cá nhân hóa, không cần đăng nhập Google. Danh sách link tạo ra được lưu trên máy này.</p>
+            <div class="row">
+              <input type="text" id="admGuestFor" placeholder="Tên khách (vd: Anh Minh &amp; gia đình)" maxlength="80">
+              <button class="qk-btn solid" id="admMkLink">Tạo link</button>
+            </div>
+            <div class="qk-out" id="admLinkOut">
+              <div class="qk-lk" id="admLinkText"></div>
+              <button class="qk-btn" id="admCopyLink" style="margin-top:8px">Sao chép</button>
+            </div>
+            <div class="qk-saved" id="admSaved"></div>
+          </div>
+          <div class="qk-tools">
+            <div class="qk-chips" id="admFilters">
+              <div class="qk-chip on" data-f="all">Tất cả</div>
+              <div class="qk-chip" data-f="yes">Sẽ đến</div>
+              <div class="qk-chip" data-f="no">Không đến</div>
+            </div>
+            <button class="qk-btn solid" id="admCsv">Xuất CSV</button>
+          </div>
+          <div class="qk-note" id="admRsvpCnt" style="margin-bottom:10px"></div>
+          <div id="admRsvpBody"><div class="qk-empty">Đang tải…</div></div>
         </div>
-        <div class="adm-saved" id="admSaved"></div>
-      </div>
 
-      <div class="adm-filters" id="admFilters">
-        <div class="adm-chip on" data-f="all">Tất cả</div>
-        <div class="adm-chip" data-f="yes">Sẽ đến</div>
-        <div class="adm-chip" data-f="no">Không đến</div>
+        <div class="qk-pane" id="qkWs">
+          <div class="qk-note" id="admWishCnt" style="margin-bottom:10px"></div>
+          <div id="admWishBody"><div class="qk-empty">Đang tải…</div></div>
+        </div>
+        <div class="qk-note">Xoá một mục là xoá vĩnh viễn khỏi cơ sở dữ liệu, không khôi phục được.</div>
       </div>
-
-      <div class="adm-card">
-        <div class="adm-hd">Xác nhận tham dự <span class="adm-cnt" id="admRsvpCnt"></span></div>
-        <div id="admRsvpBody"><div class="adm-loading">Đang tải…</div></div>
-      </div>
-      <div class="adm-card">
-        <div class="adm-hd">Sổ lưu bút <span class="adm-cnt" id="admWishCnt"></span></div>
-        <div id="admWishBody"><div class="adm-loading">Đang tải…</div></div>
-      </div>
-      <div class="adm-muted">Xoá một mục là xoá vĩnh viễn khỏi cơ sở dữ liệu, không khôi phục được.</div>
     </div>
   </div>
 </div>
@@ -1582,7 +1668,7 @@
   /* =================================== */
 
   var root=document.getElementById('adminRoot'), gate=document.getElementById('admGate'), appEl=document.getElementById('admApp'),
-      ALL=[], filt="all", loadedOnce=false;
+      ALL=[], filt="all", loadedOnce=false, tab="ov";
 
   function isAdmin(){ return location.hash.toLowerCase()==="#admin"; }
   function route(){
@@ -1606,11 +1692,11 @@
   function whenDB(cb){ if(window.WeddingDB) cb(); else window.addEventListener('weddingdb-ready', cb, {once:true}); }
 
   function load(){
-    document.getElementById('admRsvpBody').innerHTML='<div class="adm-loading">Đang tải…</div>';
-    document.getElementById('admWishBody').innerHTML='<div class="adm-loading">Đang tải…</div>';
+    document.getElementById('admRsvpBody').innerHTML='<div class="qk-empty">Đang tải…</div>';
+    document.getElementById('admWishBody').innerHTML='<div class="qk-empty">Đang tải…</div>';
     whenDB(function(){
       window.WeddingDB.loadAll().then(function(list){ ALL=list; render(); })
-        .catch(function(err){ document.getElementById('admRsvpBody').innerHTML='<div class="adm-empty">Lỗi tải: '+esc(err.message)+'</div>'; document.getElementById('admWishBody').innerHTML=''; console.error(err); });
+        .catch(function(err){ document.getElementById('admRsvpBody').innerHTML='<div class="qk-empty">Lỗi tải: '+esc(err.message)+'</div>'; document.getElementById('admWishBody').innerHTML=''; console.error(err); });
     });
   }
   document.getElementById('admReload').addEventListener('click', load);
@@ -1619,43 +1705,76 @@
   function fmtDate(ts){ if(!ts) return ''; var d=ts.toDate?ts.toDate():new Date(ts); return d.toLocaleString('vi-VN',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); }
   function yes(x){ return x.attend==='Có tham dự'; }
   function n(x){ return yes(x)?(parseInt(x.numGuest,10)||0):0; }
-  function stat(v,l,hl){ return '<div class="adm-stat'+(hl?' hl':'')+'"><div class="n">'+v+'</div><div class="l">'+l+'</div></div>'; }
+  function norm(t){ return String(t||'').trim().toLowerCase(); }
+
+  /* ===== tab ===== */
+  function setTab(t){
+    tab=t;
+    root.querySelectorAll('.qk-tab').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-t')===t); });
+    document.getElementById('qkOv').classList.toggle('on', t==='ov');
+    document.getElementById('qkGs').classList.toggle('on', t==='gs');
+    document.getElementById('qkWs').classList.toggle('on', t==='ws');
+    root.scrollTop=0;
+  }
+  document.getElementById('qkTabs').addEventListener('click', function(e){ var b=e.target.closest('.qk-tab'); if(b) setTab(b.getAttribute('data-t')); });
+
+  var IC={
+    users:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M16 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c1.9.6 3.1 2.2 3.5 5.2"/></svg>',
+    send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 3 3 10.5l7 2.5 2.5 7z"/><path d="m10 13 11-10"/></svg>',
+    ok:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5 1.6 0 3 .4 4.1 1.1"/><path d="m15 17.5 2.2 2.2 4-4.4"/></svg>',
+    heart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3.5" width="18" height="17" rx="3"/><path d="M12 16.5s-3.6-2.2-3.6-5a2 2 0 0 1 3.6-1.2 2 2 0 0 1 3.6 1.2c0 2.8-3.6 5-3.6 5z"/></svg>'
+  };
+  function card(ic,l,v,sm){ return '<div class="qk-card"><div class="lb">'+IC[ic]+l+'</div><div class="v">'+v+(sm?'<small>'+sm+'</small>':'')+'</div></div>'; }
+  function pct(a,b){ return b>0?Math.round(a*100/b):0; }
 
   function render(){
     var rs=ALL.filter(function(x){return x.attend;});
     var wishes=ALL.filter(function(x){return x.wish && x.wish.trim();});
-    var going=rs.filter(yes), sum=function(a){return a.reduce(function(s,x){return s+n(x);},0);};
-    document.getElementById('admStats').innerHTML=
-      stat(sum(going),'Tổng khách sẽ đến',true)+stat(rs.length,'Lượt phản hồi')+stat(going.length,'Phản hồi sẽ đến')+
-      stat(rs.length-going.length,'Không đến')+stat(wishes.length,'Lời chúc');
+    var going=rs.filter(yes), notgo=rs.filter(function(x){return !yes(x);});
+    var sum=function(a){return a.reduce(function(s,x){return s+n(x);},0);};
+    var inv=invLoad();
+    var names={}; rs.forEach(function(x){ names[norm(x.invitedAs)]=1; names[norm(x.guestName)]=1; });
+    var replied=inv.filter(function(it){ return names[norm(it.name)]; }).length;
+    var unreplied=inv.length-replied;
+
+    document.getElementById('qkStats').innerHTML=
+      card('users','Phản hồi',rs.length)+
+      card('send','Link đã tạo',inv.length,replied+' đã trả lời')+
+      card('ok','Sẽ đến dự',sum(going),'người')+
+      card('heart','Lời chúc',wishes.length);
+
+    var tot=rs.length+unreplied;
+    document.getElementById('qkRows').innerHTML=
+      '<button class="qk-row" data-go="yes"><div class="t"><span>Sẽ tham dự</span><em>'+sum(going)+' người</em></div><div class="d">'+going.length+' lượt phản hồi</div><div class="qk-bar g"><b style="width:'+pct(going.length,tot)+'%"></b></div></button>'+
+      '<button class="qk-row" data-go="no"><div class="t"><span>Không tham dự</span><em>'+notgo.length+' lượt</em></div><div class="d">Đã báo không đến được</div><div class="qk-bar r"><b style="width:'+pct(notgo.length,tot)+'%"></b></div></button>'+
+      '<button class="qk-row" data-go="all"><div class="t"><span>Chưa trả lời</span><em>'+unreplied+' link</em></div><div class="d">Link đã tạo nhưng chưa thấy phản hồi</div><div class="qk-bar n"><b style="width:'+pct(unreplied,tot)+'%"></b></div></button>';
+    root.querySelectorAll('.qk-row').forEach(function(b){ b.onclick=function(){ setFilter(b.getAttribute('data-go')); setTab('gs'); }; });
 
     var list=rs.filter(function(x){ if(filt==='yes') return yes(x); if(filt==='no') return !yes(x); return true; });
     document.getElementById('admRsvpCnt').textContent=list.length+' lượt · '+sum(list)+' khách';
-    if(!list.length) document.getElementById('admRsvpBody').innerHTML='<div class="adm-empty">Chưa có xác nhận nào.</div>';
+    if(!list.length) document.getElementById('admRsvpBody').innerHTML='<div class="qk-empty">Chưa có xác nhận nào.</div>';
     else {
-      var h='<table><thead><tr><th>Khách</th><th>Tham dự</th><th>SL</th><th class="hide-m">Lúc</th><th></th></tr></thead><tbody>';
+      var h='';
       list.forEach(function(x){
-        h+='<tr><td><b>'+esc(x.guestName)+'</b>'+(x.invitedAs&&x.invitedAs!==x.guestName?'<br><span class="adm-muted">mời: '+esc(x.invitedAs)+'</span>':'')+'</td>'+
-           '<td><span class="adm-tag '+(yes(x)?'yes':'no')+'">'+(yes(x)?'Sẽ đến':'Không đến')+'</span></td>'+
-           '<td>'+(yes(x)?n(x):'–')+'</td>'+
-           '<td class="hide-m adm-muted">'+esc(fmtDate(x.createdAt))+'</td>'+
-           '<td><button class="adm-del" data-id="'+x.id+'">Xoá</button></td></tr>';
+        h+='<div class="qk-item"><div class="hd"><div class="nm">'+esc(x.guestName)+(x.invitedAs&&x.invitedAs!==x.guestName?'<small>mời: '+esc(x.invitedAs)+'</small>':'')+'</div>'+
+           '<span class="qk-tag '+(yes(x)?'yes':'no')+'">'+(yes(x)?'Sẽ đến · '+n(x)+' người':'Không đến')+'</span></div>'+
+           '<div class="mt"><span>'+esc(fmtDate(x.createdAt))+'</span><button class="qk-del" data-id="'+x.id+'">Xoá</button></div></div>';
       });
-      document.getElementById('admRsvpBody').innerHTML=h+'</tbody></table>';
+      document.getElementById('admRsvpBody').innerHTML=h;
     }
 
     document.getElementById('admWishCnt').textContent=wishes.length+' lời chúc';
-    if(!wishes.length) document.getElementById('admWishBody').innerHTML='<div class="adm-empty">Chưa có lời chúc nào.</div>';
+    if(!wishes.length) document.getElementById('admWishBody').innerHTML='<div class="qk-empty">Chưa có lời chúc nào.</div>';
     else {
-      var h2='<table><thead><tr><th>Người gửi</th><th>Lời chúc</th><th class="hide-m">Lúc</th><th></th></tr></thead><tbody>';
+      var h2='';
       wishes.forEach(function(x){
-        h2+='<tr><td><b>'+esc(x.guestName)+'</b></td><td class="adm-wishcol">'+esc(x.wish)+'</td>'+
-            '<td class="hide-m adm-muted">'+esc(fmtDate(x.createdAt))+'</td>'+
-            '<td><button class="adm-del" data-id="'+x.id+'">Xoá</button></td></tr>';
+        h2+='<div class="qk-item"><div class="hd"><div class="nm">'+esc(x.guestName)+'</div></div><div class="wish">'+esc(x.wish)+'</div>'+
+            '<div class="mt"><span>'+esc(fmtDate(x.createdAt))+'</span><button class="qk-del" data-id="'+x.id+'">Xoá</button></div></div>';
       });
-      document.getElementById('admWishBody').innerHTML=h2+'</tbody></table>';
+      document.getElementById('admWishBody').innerHTML=h2;
     }
-    root.querySelectorAll('.adm-del').forEach(function(b){ b.addEventListener('click', function(){ removeItem(b.getAttribute('data-id')); }); });
+    root.querySelectorAll('.qk-del').forEach(function(b){ b.addEventListener('click', function(){ removeItem(b.getAttribute('data-id')); }); });
+    invRender();
   }
 
   function removeItem(id){
@@ -1665,10 +1784,13 @@
       .catch(function(err){ alert('Xoá không được: '+err.message); });
   }
 
+  function setFilter(f){
+    filt=f;
+    root.querySelectorAll('.qk-chip').forEach(function(x){ x.classList.toggle('on', x.getAttribute('data-f')===f); });
+    render();
+  }
   document.getElementById('admFilters').addEventListener('click', function(e){
-    var c=e.target.closest('.adm-chip'); if(!c) return;
-    root.querySelectorAll('.adm-chip').forEach(function(x){x.classList.remove('on');});
-    c.classList.add('on'); filt=c.getAttribute('data-f'); render();
+    var c=e.target.closest('.qk-chip'); if(!c) return; setFilter(c.getAttribute('data-f'));
   });
 
   document.getElementById('admCsv').addEventListener('click', function(){
@@ -1689,15 +1811,18 @@
   }
   function invRender(){
     var a=invLoad(), box=document.getElementById('admSaved');
-    if(!a.length){ box.innerHTML='<div class="adm-muted">Link đã tạo sẽ được lưu ở đây (trên máy này).</div>'; return; }
-    var h='<div class="adm-saved-hd"><span>Đã tạo '+a.length+' link</span><button class="adm-mini" id="admCopyAll">Chép tất cả</button></div>';
+    if(!a.length){ box.innerHTML='<div class="qk-note">Link đã tạo sẽ được lưu ở đây (trên máy này).</div>'; return; }
+    var names={}; ALL.filter(function(x){return x.attend;}).forEach(function(x){ names[norm(x.invitedAs)]=1; names[norm(x.guestName)]=1; });
+    var h='<div class="qk-saved-hd"><span>Đã tạo '+a.length+' link</span><button class="qk-mini" id="admCopyAll">Chép tất cả</button></div>';
     a.forEach(function(it,i){
-      h+='<div class="adm-saved-item"><div class="nm"><b>'+esc(it.name)+'</b><span>'+esc(it.link)+'</span></div>'+
-         '<button class="adm-mini" data-c="'+i+'">Chép</button><button class="adm-mini x" data-x="'+i+'">Xoá</button></div>';
+      var r=names[norm(it.name)];
+      h+='<div class="qk-si"><div class="nm"><b>'+esc(it.name)+'</b><span>'+esc(it.link)+'</span></div>'+
+         '<span class="qk-tag '+(r?'yes':'nr')+'">'+(r?'Đã trả lời':'Chưa trả lời')+'</span>'+
+         '<button class="qk-mini" data-c="'+i+'">Chép</button><button class="qk-mini x" data-x="'+i+'">Xoá</button></div>';
     });
     box.innerHTML=h;
     box.querySelectorAll('[data-c]').forEach(function(b){ b.onclick=function(){ copyText(a[+b.dataset.c].link,b,'Chép'); }; });
-    box.querySelectorAll('[data-x]').forEach(function(b){ b.onclick=function(){ var arr=invLoad(); arr.splice(+b.dataset.x,1); invSave(arr); invRender(); }; });
+    box.querySelectorAll('[data-x]').forEach(function(b){ b.onclick=function(){ var arr=invLoad(); arr.splice(+b.dataset.x,1); invSave(arr); render(); }; });
     document.getElementById('admCopyAll').onclick=function(){
       copyText(a.map(function(it){ return it.name+': '+it.link; }).join('\n'), this, 'Chép tất cả');
     };
@@ -1712,7 +1837,7 @@
       document.getElementById('admCopyLink').onclick=function(){ copyText(link,this,'Sao chép'); };
       var a=invLoad().filter(function(it){ return it.name!==invitation.name; });
       a.unshift({name:invitation.name, link:link, at:Date.now()}); invSave(a);
-      document.getElementById('admGuestFor').value=''; invRender();
+      document.getElementById('admGuestFor').value=''; render();
     } catch(error){ alert(error.message || 'Chưa tạo được link, vui lòng thử lại.'); }
     finally{ button.disabled=false; button.textContent='Tạo link'; }
   });
