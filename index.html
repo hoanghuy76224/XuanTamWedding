@@ -573,18 +573,20 @@
   .wish-scene .desc .en{font-size:15px}
 
   .map-link{
-    display:inline-flex; align-items:center; gap:8px;
-    margin-top: 16px;
+    display:inline-flex; align-items:center; gap:10px;
+    margin-top: 20px;
     text-decoration:none;
-    color: var(--film-warm);
-    font-family:'Archivo', sans-serif;
-    font-size: 10px; letter-spacing:.25em; text-transform:uppercase;
-    border-bottom: 1px solid rgba(154,131,96,.4);
-    padding-bottom: 4px;
+    color: #fff;
+    background: var(--film-warm);
+    font-family:'Archivo', sans-serif; font-weight:600;
+    font-size: 14px; letter-spacing:.14em; text-transform:uppercase;
+    padding: 14px 28px; border-radius: 99px;
+    box-shadow: 0 6px 18px rgba(130,104,62,.35);
     transition: all .3s ease;
   }
-  .map-link:hover{ color: var(--film-cream); border-color: var(--film-cream) }
-  .map-link svg{ width:13px; height:13px; stroke: currentColor; fill:none; stroke-width:1.5 }
+  .map-link:hover{ background: var(--film-cream); color:#fff }
+  .map-link:active{ transform: scale(.97) }
+  .map-link svg{ width:20px; height:20px; stroke: currentColor; fill:none; stroke-width:2 }
 
   /* ===== Wishes / Lời chúc + bình chọn tham dự ===== */
   .wish-scene{ background: var(--film-shadow); padding: 16vh 24px; text-align:center }
