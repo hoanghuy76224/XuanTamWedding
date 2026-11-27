@@ -1482,7 +1482,7 @@
 <!-- ===== Firebase (RSVP + lưu bút) ===== -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, serverTimestamp }
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, serverTimestamp, setDoc, getDoc, updateDoc }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -1514,7 +1514,19 @@
       const snap = await getDocs(query(collection(db, COL), orderBy("createdAt","desc")));
       const out = []; snap.forEach(x => out.push({ id:x.id, ...x.data() })); return out;
     },
-    async remove(id){ return deleteDoc(doc(db, COL, id)); }
+    async remove(id){ return deleteDoc(doc(db, COL, id)); },
+    /* sổ tiền mừng: lưu dưới khoá bí mật suy ra từ mật khẩu sổ, không ai liệt kê được nếu không biết mật khẩu */
+    gift: {
+      col(key){ return collection(db, "giftbook_xuantam", key, "entries"); },
+      async list(key){ const snap = await getDocs(this.col(key)); const out=[]; snap.forEach(x=>out.push({id:x.id, ...x.data()})); return out; },
+      async add(key, d){ return addDoc(this.col(key), Object.assign({}, d, {createdAt: serverTimestamp()})); },
+      async update(key, id, d){ return updateDoc(doc(db, "giftbook_xuantam", key, "entries", id), d); },
+      async remove(key, id){ return deleteDoc(doc(db, "giftbook_xuantam", key, "entries", id)); }
+    },
+    checklist: {
+      async load(){ const s = await getDoc(doc(db, "checklist_xuantam", "main")); return s.exists() ? s.data() : null; },
+      async save(d){ return setDoc(doc(db, "checklist_xuantam", "main"), Object.assign({}, d, {updatedAt: serverTimestamp()})); }
+    }
   };
   window.dispatchEvent(new Event("weddingdb-ready"));
 </script>
@@ -1531,7 +1543,7 @@
 .qk-top h1{font-family:'Fraunces',serif;font-weight:600;font-size:27px;line-height:1.15;color:#2b2326}
 .qk-top .sub{font-size:12.5px;color:#8c7a78;margin-top:4px}
 .qk-round{width:42px;height:42px;border-radius:50%;border:1px solid #eadfda;background:#fff;color:#2b2326;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;font-size:17px;flex:none}
-.qk-tabs{display:flex;gap:4px;background:#f3ebe7;border:1px solid #eadfda;border-radius:16px;padding:6px;margin-bottom:16px}
+.qk-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:#f3ebe7;border:1px solid #eadfda;border-radius:16px;padding:6px;margin-bottom:16px}
 .qk-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 6px;border-radius:12px;font-size:14px;color:#6b5b5a;cursor:pointer;border:0;background:none;font-family:inherit;white-space:nowrap}
 .qk-tab svg{width:17px;height:17px;flex:none}
 .qk-tab.on{background:#fff;color:#2b2326;font-weight:600;box-shadow:0 1px 3px rgba(80,40,40,.08)}
@@ -1590,6 +1602,31 @@
 .qk-del:active{background:#fde3ea}
 .qk-empty{padding:34px 10px;text-align:center;color:#8c7a78;font-size:13.5px}
 .qk-note{font-size:12px;color:#9a8886;margin:6px 2px 0}
+.gf-f{display:flex;flex-direction:column;gap:10px}
+.gf-f input,.gf-f select,.gf-search{width:100%;font-size:16px;padding:11px 13px;border:1px solid #eadfda;border-radius:12px;outline:none;font-family:inherit;background:#fffdfc;color:#2b2326}
+.gf-f input:focus,.gf-f select:focus,.gf-search:focus{border-color:#b23a52}
+.gf-search{flex:1;min-width:160px}
+.gf-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gf-f select{padding-right:4px}
+.gf-quick .qk-chip{padding:6px 12px;font-size:12.5px}
+.qk-card .v.money{font-size:24px}
+.gf-amt{font-weight:700;color:#2b2326;white-space:nowrap;font-size:15.5px}
+.gf-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.gf-meta span{font-size:11.5px;padding:2px 9px;border-radius:10px;background:#f6eeeb;color:#7a5a5f}
+.ty-card{background:#fff;border:1px solid #efe3de;border-radius:16px;padding:14px 16px;margin-bottom:10px}
+.ty-card .tx{font-size:14.5px;line-height:1.6;white-space:pre-wrap;color:#3b3032}
+.ty-card .ft{display:flex;justify-content:flex-end;margin-top:10px}
+.ck-g{background:#fff;border:1px solid #efe3de;border-radius:16px;margin-bottom:14px;overflow:hidden}
+.ck-gh{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #f1e7e3;font-family:'Fraunces',serif;font-weight:600;font-size:15.5px}
+.ck-gh small{font-family:'Archivo',sans-serif;font-weight:400;font-size:12px;color:#8c7a78}
+.ck-i{display:flex;align-items:flex-start;gap:12px;padding:11px 16px;border-bottom:1px dashed #f1e7e3}
+.ck-i:last-of-type{border-bottom:0}
+.ck-i input[type=checkbox]{width:20px;height:20px;accent-color:#0e9f6e;flex:none;margin-top:1px}
+.ck-i label{flex:1;font-size:14.5px;line-height:1.45;cursor:pointer}
+.ck-i.done label{text-decoration:line-through;color:#a8999a}
+.ck-add{display:flex;gap:8px;padding:10px 16px 14px;border-top:1px solid #f1e7e3}
+.ck-add input{flex:1;font-size:15px;padding:9px 12px;border:1px solid #eadfda;border-radius:10px;outline:none;font-family:inherit;min-width:0}
+@media(max-width:400px){.qk-tab{font-size:13px;gap:5px}.qk-tab svg{width:15px;height:15px}}
 </style>
 <!-- ============ ADMIN (mở bằng #admin ở cuối link) ============ -->
 <div class="admin-root" id="adminRoot">
@@ -1618,16 +1655,19 @@
           <button class="qk-tab on" data-t="ov"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><path d="M14 17h6M17 14v6"/></svg>Tổng quan</button>
           <button class="qk-tab" data-t="gs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M16 4.8a3.3 3.3 0 0 1 0 6.4M18 14.8c1.9.6 3.1 2.2 3.5 5.2"/></svg>Khách mời</button>
           <button class="qk-tab" data-t="ws"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v9a1.5 1.5 0 0 1-1.5 1.5H10l-4.5 4v-4H5.5A1.5 1.5 0 0 1 4 14.5z"/></svg>Lời chúc</button>
+          <button class="qk-tab" data-t="gf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="12" cy="14.5" r="2"/></svg>Tiền mừng</button>
+          <button class="qk-tab" data-t="ty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Cảm ơn</button>
+          <button class="qk-tab" data-t="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>Checklist</button>
         </div>
 
-        <div class="qk-pane on" id="qkOv">
+        <div class="qk-pane on" id="qkOv" data-t="ov">
           <div class="qk-grid" id="qkStats"></div>
           <div class="qk-h">Theo trạng thái</div>
           <div class="qk-legend"><span><i style="background:#0e9f6e"></i>Sẽ tham dự</span><span><i style="background:#e5446d"></i>Không tham dự</span><span><i style="background:#d9d2cf"></i>Chưa trả lời</span></div>
           <div class="qk-rows" id="qkRows"></div>
         </div>
 
-        <div class="qk-pane" id="qkGs">
+        <div class="qk-pane" id="qkGs" data-t="gs">
           <div class="qk-invite">
             <h3>Tạo link mời có tên khách</h3>
             <p>Nhập tên khách để tạo link thiệp cá nhân hóa, không cần đăng nhập Google. Danh sách link tạo ra được lưu trên máy này.</p>
@@ -1653,10 +1693,80 @@
           <div id="admRsvpBody"><div class="qk-empty">Đang tải…</div></div>
         </div>
 
-        <div class="qk-pane" id="qkWs">
+        <div class="qk-pane" id="qkWs" data-t="ws">
           <div class="qk-note" id="admWishCnt" style="margin-bottom:10px"></div>
           <div id="admWishBody"><div class="qk-empty">Đang tải…</div></div>
         </div>
+        <div class="qk-pane" id="qkGf" data-t="gf">
+          <div class="qk-invite" id="gfLock">
+            <h3>Sổ tiền mừng</h3>
+            <p>Sổ này có mật khẩu riêng, khác mật khẩu trang quản trị. Dữ liệu chỉ mở được khi nhập đúng mật khẩu sổ.</p>
+            <div class="row">
+              <input type="password" id="gfPw" placeholder="Mật khẩu sổ tiền mừng" autocomplete="off">
+              <button class="qk-btn solid" id="gfPwBtn">Mở sổ</button>
+            </div>
+            <div class="qk-note" id="gfPwErr" style="color:#c0364f"></div>
+          </div>
+          <div id="gfApp" style="display:none">
+            <div class="qk-grid" id="gfStats"></div>
+            <div class="qk-invite" id="gfForm">
+              <h3 id="gfFormTitle">Ghi phong bì</h3>
+              <p>Gõ số tiền theo nghìn cũng được, vd 500 là 500.000đ.</p>
+              <div class="gf-f">
+                <input type="text" id="gfName" list="gfNames" placeholder="Tên khách (vd: Cô Hoa, bạn Minh)" maxlength="80">
+                <datalist id="gfNames"></datalist>
+                <input type="text" id="gfAmt" inputmode="numeric" placeholder="Số tiền">
+                <div class="qk-chips gf-quick" id="gfQuick"><span class="qk-chip" data-v="200000">200k</span><span class="qk-chip" data-v="300000">300k</span><span class="qk-chip" data-v="500000">500k</span><span class="qk-chip" data-v="1000000">1 triệu</span><span class="qk-chip" data-v="2000000">2 triệu</span></div>
+                <div class="gf-2">
+                  <select id="gfSide"><option>Nhà gái</option><option>Nhà trai</option><option>Bạn chung</option></select>
+                  <select id="gfGroup"><option>Họ hàng</option><option>Bạn bè</option><option>Đồng nghiệp</option><option>Hàng xóm</option><option>Bạn của bố mẹ</option><option>Khác</option></select>
+                </div>
+                <div class="gf-2">
+                  <select id="gfMethod"><option>Tiền mặt</option><option>Chuyển khoản</option><option>Vàng / quà</option></select>
+                  <input type="text" id="gfNote" placeholder="Ghi chú (tuỳ chọn)" maxlength="120">
+                </div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                  <button class="qk-btn solid" id="gfSave">Lưu</button>
+                  <button class="qk-btn" id="gfCancel" style="display:none">Huỷ sửa</button>
+                </div>
+              </div>
+            </div>
+            <div class="qk-h">Theo nhóm</div>
+            <div class="qk-rows" id="gfRows"></div>
+            <div class="qk-tools">
+              <input type="search" id="gfSearch" class="gf-search" placeholder="Tìm tên…">
+              <button class="qk-btn solid" id="gfCsv">Xuất Excel (CSV)</button>
+            </div>
+            <div class="qk-chips" id="gfSideF" style="margin:0 2px 12px"><span class="qk-chip on" data-f="">Tất cả</span><span class="qk-chip" data-f="Nhà gái">Nhà gái</span><span class="qk-chip" data-f="Nhà trai">Nhà trai</span><span class="qk-chip" data-f="Bạn chung">Bạn chung</span></div>
+            <div class="qk-note" id="gfCnt" style="margin-bottom:10px"></div>
+            <div id="gfList"></div>
+            <div class="qk-note"><a href="#" id="gfLockBtn" style="color:#b23a52">Khoá sổ trên máy này</a></div>
+          </div>
+        </div>
+
+        <div class="qk-pane" id="qkTy" data-t="ty">
+          <div class="qk-h">Status cảm ơn đăng Facebook</div>
+          <div class="qk-note" style="margin-bottom:10px">Bấm Chép rồi dán lên Facebook, sửa thêm vài chữ cho đúng giọng mình.</div>
+          <div class="qk-chips" id="tyTone" style="margin:0 2px 12px"></div>
+          <div id="tyFb"></div>
+          <div class="qk-h" style="margin-top:18px">Tin nhắn cảm ơn riêng từng khách (Zalo, Messenger)</div>
+          <div class="qk-invite">
+            <div class="row">
+              <input type="text" id="tyGuest" list="tyGuests" placeholder="Tên khách (vd: anh Minh)" maxlength="80">
+              <datalist id="tyGuests"></datalist>
+            </div>
+            <div class="qk-note">Gợi ý tên lấy từ danh sách khách đã xác nhận.</div>
+          </div>
+          <div id="tyMsg"></div>
+        </div>
+
+        <div class="qk-pane" id="qkCk" data-t="ck">
+          <div class="qk-grid" id="ckStats"></div>
+          <div class="qk-bar g" style="margin:0 2px 18px"><b id="ckBar"></b></div>
+          <div id="ckList"><div class="qk-empty">Đang tải…</div></div>
+          <div class="qk-note" id="ckSync"></div>
+        </div>
+
         <div class="qk-note">Xoá một mục là xoá vĩnh viễn khỏi cơ sở dữ liệu, không khôi phục được.</div>
       </div>
     </div>
@@ -1697,7 +1807,7 @@
     document.getElementById('admRsvpBody').innerHTML='<div class="qk-empty">Đang tải…</div>';
     document.getElementById('admWishBody').innerHTML='<div class="qk-empty">Đang tải…</div>';
     whenDB(function(){
-      window.WeddingDB.loadAll().then(function(list){ ALL=list; render(); })
+      window.WeddingDB.loadAll().then(function(list){ ALL=list; window.__qkAll=list; render(); window.dispatchEvent(new Event('qk-data')); })
         .catch(function(err){ document.getElementById('admRsvpBody').innerHTML='<div class="qk-empty">Lỗi tải: '+esc(err.message)+'</div>'; document.getElementById('admWishBody').innerHTML=''; console.error(err); });
     });
   }
@@ -1713,9 +1823,8 @@
   function setTab(t){
     tab=t;
     root.querySelectorAll('.qk-tab').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-t')===t); });
-    document.getElementById('qkOv').classList.toggle('on', t==='ov');
-    document.getElementById('qkGs').classList.toggle('on', t==='gs');
-    document.getElementById('qkWs').classList.toggle('on', t==='ws');
+    root.querySelectorAll('.qk-pane[data-t]').forEach(function(p){ p.classList.toggle('on', p.getAttribute('data-t')===t); });
+    window.dispatchEvent(new CustomEvent('qk-tab',{detail:t}));
     root.scrollTop=0;
   }
   document.getElementById('qkTabs').addEventListener('click', function(e){ var b=e.target.closest('.qk-tab'); if(b) setTab(b.getAttribute('data-t')); });
@@ -1847,6 +1956,205 @@
 
   route();
 })();
+</script>
+<script>
+(function(){
+  var root=document.getElementById('adminRoot');
+  var GIFT_VERIFY='ca43eb08bb611fa86a65d3cad7b47b39abab674b979afba80f7a841ce281bc2a';
+  var WEDDING=new Date('2026-12-26T18:00:00+07:00');
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function whenDB(cb){ if(window.WeddingDB) cb(); else window.addEventListener('weddingdb-ready', cb, {once:true}); }
+  function money(v){ return (Math.round(v)||0).toLocaleString('vi-VN')+'đ'; }
+  function short(v){ if(v>=1e9) return (v/1e9).toFixed(2).replace(/\.?0+$/,'')+' tỷ'; if(v>=1e6) return (v/1e6).toFixed(1).replace(/\.0$/,'')+' tr'; if(v>=1e3) return Math.round(v/1e3)+'k'; return String(v); }
+  function parseAmt(t){ var n=parseInt(String(t||'').replace(/[^\d]/g,''),10)||0; if(n>0 && n<10000) n*=1000; return n; }
+  function copyText(t,b,label){
+    (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){ b.textContent='Đã chép ✓'; setTimeout(function(){b.textContent=label;},1500); })
+      .catch(function(){ prompt('Chép:',t); });
+  }
+  async function sha(t){ var b=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t)); return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0');}).join(''); }
+  function guestNames(){
+    var seen={}, out=[];
+    (window.__qkAll||[]).forEach(function(x){ [x.invitedAs,x.guestName].forEach(function(n){ n=(n||'').trim(); if(n && !seen[n.toLowerCase()]){ seen[n.toLowerCase()]=1; out.push(n); } }); });
+    try{ JSON.parse(localStorage.getItem('hn_invites')||'[]').forEach(function(it){ var n=(it.name||'').trim(); if(n && !seen[n.toLowerCase()]){ seen[n.toLowerCase()]=1; out.push(n); } }); }catch(e){}
+    return out;
+  }
+  function fillNames(){
+    var h=guestNames().map(function(n){ return '<option value="'+esc(n)+'">'; }).join('');
+    $('gfNames').innerHTML=h; $('tyGuests').innerHTML=h;
+  }
+  window.addEventListener('qk-data', fillNames);
+
+  /* ================= SỔ TIỀN MỪNG ================= */
+  var KEY=null, GIFTS=[], editId=null, sideF='', q='';
+  try{ KEY=sessionStorage.getItem('xt_giftkey'); }catch(e){}
+  async function unlock(){
+    var pw=$('gfPw').value; $('gfPwErr').textContent='';
+    if(!pw) return;
+    if(await sha('xt-gift-verify|'+pw)!==GIFT_VERIFY){ $('gfPwErr').textContent='Mật khẩu sổ chưa đúng.'; return; }
+    KEY=(await sha('xt-gift-key|'+pw)).slice(0,40);
+    try{ sessionStorage.setItem('xt_giftkey',KEY); }catch(e){}
+    $('gfPw').value=''; openBook();
+  }
+  $('gfPwBtn').addEventListener('click', unlock);
+  $('gfPw').addEventListener('keydown', function(e){ if(e.key==='Enter') unlock(); });
+  $('gfLockBtn').addEventListener('click', function(e){ e.preventDefault(); KEY=null; try{sessionStorage.removeItem('xt_giftkey');}catch(_){} GIFTS=[]; $('gfApp').style.display='none'; $('gfLock').style.display='block'; });
+  function openBook(){ $('gfLock').style.display='none'; $('gfApp').style.display='block'; fillNames(); loadGifts(); }
+  function loadGifts(){
+    $('gfList').innerHTML='<div class="qk-empty">Đang tải…</div>';
+    whenDB(function(){
+      window.WeddingDB.gift.list(KEY).then(function(l){
+        GIFTS=l.sort(function(a,b){ var ta=a.createdAt&&a.createdAt.seconds||9e12, tb=b.createdAt&&b.createdAt.seconds||9e12; return tb-ta; });
+        renderGifts();
+      }).catch(function(err){ $('gfList').innerHTML='<div class="qk-empty">Lỗi tải sổ: '+esc(err.message)+'</div>'; });
+    });
+  }
+  function card(l,v,sm,cls){ return '<div class="qk-card"><div class="lb">'+l+'</div><div class="v '+(cls||'')+'">'+v+(sm?'<small>'+sm+'</small>':'')+'</div></div>'; }
+  function renderGifts(){
+    var cash=GIFTS.filter(function(g){return g.method!=='Vàng / quà';});
+    var tot=cash.reduce(function(s,g){return s+(g.amount||0);},0);
+    var ck=GIFTS.filter(function(g){return g.method==='Chuyển khoản';}).reduce(function(s,g){return s+(g.amount||0);},0);
+    var gai=cash.filter(function(g){return g.side==='Nhà gái';}).reduce(function(s,g){return s+(g.amount||0);},0);
+    var trai=cash.filter(function(g){return g.side==='Nhà trai';}).reduce(function(s,g){return s+(g.amount||0);},0);
+    $('gfStats').innerHTML=
+      card('Tổng tiền mừng',short(tot),'','money')+
+      card('Số phong bì',GIFTS.length,cash.length?('TB '+short(Math.round(tot/cash.length))):'')+
+      card('Nhà gái / Nhà trai',short(gai)+' / '+short(trai),'','money')+
+      card('Chuyển khoản',short(ck),tot?Math.round(ck*100/tot)+'%':'','money');
+    var groups={}; cash.forEach(function(g){ var k=g.group||'Khác'; groups[k]=groups[k]||{n:0,s:0}; groups[k].n++; groups[k].s+=g.amount||0; });
+    var keys=Object.keys(groups).sort(function(a,b){return groups[b].s-groups[a].s;});
+    $('gfRows').innerHTML=keys.length?keys.map(function(k){
+      return '<div class="qk-row" style="cursor:default"><div class="t"><span>'+esc(k)+'</span><em>'+money(groups[k].s)+'</em></div><div class="d">'+groups[k].n+' phong bì</div><div class="qk-bar g"><b style="width:'+(tot?Math.round(groups[k].s*100/tot):0)+'%"></b></div></div>';
+    }).join(''):'<div class="qk-empty">Chưa có phong bì nào.</div>';
+    var list=GIFTS.filter(function(g){ return (!sideF||g.side===sideF) && (!q||String(g.name||'').toLowerCase().indexOf(q)>=0); });
+    var ls=list.filter(function(g){return g.method!=='Vàng / quà';}).reduce(function(s,g){return s+(g.amount||0);},0);
+    $('gfCnt').textContent=list.length+' phong bì · '+money(ls);
+    $('gfList').innerHTML=list.length?list.map(function(g){
+      return '<div class="qk-item"><div class="hd"><div class="nm">'+esc(g.name)+(g.note?'<small>'+esc(g.note)+'</small>':'')+'</div><div class="gf-amt">'+(g.method==='Vàng / quà'&&!g.amount?'Quà':money(g.amount))+'</div></div>'+
+        '<div class="gf-meta"><span>'+esc(g.side||'')+'</span><span>'+esc(g.group||'')+'</span><span>'+esc(g.method||'')+'</span></div>'+
+        '<div class="mt"><span></span><span><button class="qk-del" style="color:#8a4a58" data-e="'+g.id+'">Sửa</button><button class="qk-del" data-d="'+g.id+'">Xoá</button></span></div></div>';
+    }).join(''):'<div class="qk-empty">Không có phong bì nào khớp.</div>';
+    $('gfList').querySelectorAll('[data-e]').forEach(function(b){ b.onclick=function(){ startEdit(b.dataset.e); }; });
+    $('gfList').querySelectorAll('[data-d]').forEach(function(b){ b.onclick=function(){ delGift(b.dataset.d); }; });
+  }
+  function resetForm(){ editId=null; $('gfName').value=''; $('gfAmt').value=''; $('gfNote').value=''; $('gfFormTitle').textContent='Ghi phong bì'; $('gfSave').textContent='Lưu'; $('gfCancel').style.display='none'; }
+  function startEdit(id){
+    var g=GIFTS.filter(function(x){return x.id===id;})[0]; if(!g) return;
+    editId=id; $('gfName').value=g.name||''; $('gfAmt').value=g.amount?g.amount.toLocaleString('vi-VN'):''; $('gfNote').value=g.note||'';
+    $('gfSide').value=g.side||'Nhà gái'; $('gfGroup').value=g.group||'Khác'; $('gfMethod').value=g.method||'Tiền mặt';
+    $('gfFormTitle').textContent='Sửa phong bì'; $('gfSave').textContent='Cập nhật'; $('gfCancel').style.display='inline-block';
+    $('gfForm').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  $('gfCancel').addEventListener('click', resetForm);
+  $('gfQuick').addEventListener('click', function(e){ var c=e.target.closest('.qk-chip'); if(c) $('gfAmt').value=(+c.dataset.v).toLocaleString('vi-VN'); });
+  $('gfAmt').addEventListener('blur', function(){ var n=parseAmt(this.value); this.value=n?n.toLocaleString('vi-VN'):''; });
+  $('gfSave').addEventListener('click', function(){
+    var d={ name:$('gfName').value.trim(), amount:parseAmt($('gfAmt').value), side:$('gfSide').value, group:$('gfGroup').value, method:$('gfMethod').value, note:$('gfNote').value.trim() };
+    if(!d.name){ alert('Nhập tên khách.'); return; }
+    if(!d.amount && d.method!=='Vàng / quà'){ alert('Nhập số tiền.'); return; }
+    var b=this; b.disabled=true;
+    var p=editId?window.WeddingDB.gift.update(KEY,editId,d):window.WeddingDB.gift.add(KEY,d);
+    p.then(function(){ var keepSide=d.side, keepGroup=d.group, keepM=d.method; resetForm(); $('gfSide').value=keepSide; $('gfGroup').value=keepGroup; $('gfMethod').value=keepM; loadGifts(); $('gfName').focus(); })
+     .catch(function(err){ alert('Chưa lưu được: '+err.message); })
+     .finally(function(){ b.disabled=false; });
+  });
+  function delGift(id){
+    var g=GIFTS.filter(function(x){return x.id===id;})[0];
+    if(!confirm('Xoá phong bì của "'+(g&&g.name||'')+'"? Không khôi phục được.')) return;
+    window.WeddingDB.gift.remove(KEY,id).then(loadGifts).catch(function(err){ alert('Xoá không được: '+err.message); });
+  }
+  $('gfSearch').addEventListener('input', function(){ q=this.value.trim().toLowerCase(); renderGifts(); });
+  $('gfSideF').addEventListener('click', function(e){ var c=e.target.closest('.qk-chip'); if(!c) return; sideF=c.dataset.f; $('gfSideF').querySelectorAll('.qk-chip').forEach(function(x){x.classList.toggle('on',x===c);}); renderGifts(); });
+  $('gfCsv').addEventListener('click', function(){
+    var rows=[['Tên khách','Số tiền','Bên','Nhóm','Hình thức','Ghi chú']];
+    GIFTS.forEach(function(g){ rows.push([g.name||'',g.amount||0,g.side||'',g.group||'',g.method||'',g.note||'']); });
+    var csv='﻿'+rows.map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(',');}).join('\n');
+    var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+    a.download='so-tien-mung-xuan-tam.csv'; document.body.appendChild(a); a.click(); a.remove();
+  });
+  if(KEY) openBook();
+
+  /* ================= CẢM ƠN ================= */
+  var FB={
+    'Trang trọng':[
+      'Thay mặt hai gia đình, vợ chồng Thanh Xuân & Văn Tam xin chân thành cảm ơn quý ông bà, cô chú, anh chị và bạn bè đã dành thời gian đến chung vui trong ngày trọng đại 26.12.2026 của chúng con.\nSự hiện diện và những lời chúc phúc của mọi người là món quà ý nghĩa nhất với vợ chồng con. Nếu trong lúc đón tiếp có điều gì sơ suất, kính mong mọi người lượng thứ.\nChúc mọi người luôn mạnh khoẻ và bình an. 🤍',
+      'Lễ Vu Quy và Tiệc cưới của Thanh Xuân & Văn Tam đã diễn ra trọn vẹn. Gia đình chúng tôi xin gửi lời cảm ơn sâu sắc đến quý quan khách, họ hàng, đồng nghiệp và bạn bè gần xa đã đến chung vui, gửi quà và lời chúc. Thời gian đón tiếp có hạn, nếu chưa chu đáo mong mọi người thông cảm. Xin cảm ơn ạ!'
+    ],
+    'Ấm áp':[
+      'Cảm ơn mọi người đã đến, đã chúc, đã cười cùng tụi mình trong ngày 26.12 vừa rồi. 💍\nNhìn lại ảnh mới thấy mình được thương nhiều như vậy. Tụi mình sẽ giữ những lời chúc ấy thật kỹ, sống thật tốt để không phụ lòng mọi người.\nThương lắm! Thanh Xuân & Văn Tam',
+      'Một ngày dài mà trôi qua nhanh quá. Cảm ơn ba mẹ hai bên đã lo cho tụi con từng chút, cảm ơn họ hàng, anh chị em và bạn bè đã có mặt, người ở xa thì gửi lời chúc, gửi quà về.\nTừ hôm nay tụi mình chính thức là một nhà rồi. ❤️'
+    ],
+    'Vui vẻ':[
+      'Chính thức hết ế! 🎉\nCảm ơn cả nhà đã tới quẩy cùng Thanh Xuân & Văn Tam hôm 26.12. Đồ ăn hết, rượu hết, chỉ có tình cảm mọi người là còn nguyên. Ai chưa kịp chụp hình với cô dâu chú rể thì hẹn cà phê bù nha!',
+      'Đám cưới xong rồi, giờ mới có thời gian ngồi đọc lại hết lời chúc. Cảm ơn mọi người nhiều nha, vui không tả nổi! Ai có ảnh đẹp nhớ gửi tụi mình xin với nha 📸'
+    ],
+    'Ngắn gọn':[
+      'Cảm ơn mọi người đã đến chung vui cùng Thanh Xuân & Văn Tam. Thương nhiều! 🤍',
+      '26.12.2026 ✨ Cảm ơn tất cả mọi người vì một ngày thật trọn vẹn. Xuân & Tam'
+    ]
+  };
+  var MSG=[
+    'Dạ con chào {ten}. Vợ chồng con cảm ơn {ten} đã dành thời gian đến dự đám cưới của tụi con. Lúc đón khách đông quá con chưa kịp nói chuyện được nhiều, có gì thiếu sót mong {ten} bỏ qua cho tụi con nha. Con chúc {ten} và gia đình nhiều sức khoẻ ạ!',
+    'Cảm ơn {ten} đã tới chung vui với tụi mình nha! Có {ten} hôm đó vui hẳn luôn. Hôm nào rảnh tụi mình mời cà phê nói chuyện cho đã nhé 💛',
+    'Gửi {ten}, tụi mình nhận được quà và lời chúc rồi, cảm ơn nhiều lắm nha. Tiếc là {ten} không tới được, hẹn dịp gần nhất gặp nhau nhé!'
+  ];
+  var tone='Trang trọng';
+  function renderTy(){
+    $('tyTone').innerHTML=Object.keys(FB).map(function(k){ return '<span class="qk-chip'+(k===tone?' on':'')+'" data-k="'+k+'">'+k+'</span>'; }).join('');
+    $('tyFb').innerHTML=FB[tone].map(function(t,i){ return '<div class="ty-card"><div class="tx">'+esc(t)+'</div><div class="ft"><button class="qk-mini" data-fb="'+i+'">Chép</button></div></div>'; }).join('');
+    $('tyFb').querySelectorAll('[data-fb]').forEach(function(b){ b.onclick=function(){ copyText(FB[tone][+b.dataset.fb],b,'Chép'); }; });
+    renderMsg();
+  }
+  function renderMsg(){
+    var name=$('tyGuest').value.trim()||'anh/chị';
+    var arr=MSG.map(function(t){ return t.split('{ten}').join(name); });
+    $('tyMsg').innerHTML=arr.map(function(t,i){ return '<div class="ty-card"><div class="tx">'+esc(t)+'</div><div class="ft"><button class="qk-mini" data-m="'+i+'">Chép</button></div></div>'; }).join('');
+    $('tyMsg').querySelectorAll('[data-m]').forEach(function(b){ b.onclick=function(){ copyText(arr[+b.dataset.m],b,'Chép'); }; });
+  }
+  $('tyTone').addEventListener('click', function(e){ var c=e.target.closest('.qk-chip'); if(c){ tone=c.dataset.k; renderTy(); } });
+  $('tyGuest').addEventListener('input', renderMsg);
+  renderTy();
+
+  /* ================= CHECKLIST ================= */
+  var CK_DEF=[
+    ['Trước 1 tháng',['Chốt danh sách khách mời hai bên','Gửi thiệp online cho khách ở xa','Chốt thực đơn và số bàn với nhà hàng','Thử váy cưới, áo dài, vest lần cuối','Đặt makeup, làm tóc cho ngày cưới','Chọn người dẫn chương trình, ban nhạc']],
+    ['Trước 2 tuần',['Gửi thiệp, nhắn tin mời khách còn lại','Chốt kịch bản lễ và tiệc với MC','Chuẩn bị nhẫn cưới','Chuẩn bị mâm quả, lễ vật','Đặt xe hoa, xe đưa đón họ hàng','Nhờ người phụ dâu, phụ rể, người bê tráp']],
+    ['Trước 1 tuần',['Gọi xác nhận lại số khách, báo số bàn chốt cho nhà hàng','Gửi nhà hàng video, slide chiếu màn hình','Chuẩn bị phong bì, tiền lẻ, quà cảm ơn','Sắp xếp sơ đồ chỗ ngồi họ hàng','Đổi tiền mới mừng tuổi, lì xì']],
+    ['1 đến 2 ngày trước',['Nhắc lịch makeup, chụp ảnh, xe hoa','Gom đồ: nhẫn, giấy tờ, váy, giày, phụ kiện','Phân công người giữ phong bì, sổ tiền mừng','Ngủ sớm, uống đủ nước']],
+    ['Ngày cưới',['Mang nhẫn và quà trao cho bố mẹ','Có người giữ điện thoại, sạc dự phòng','Ghi sổ tiền mừng ngay sau tiệc']],
+    ['Sau cưới',['Đăng status cảm ơn','Nhắn cảm ơn riêng khách thân','Thanh toán nốt các dịch vụ','Lưu file ảnh, video cưới']]
+  ];
+  var CK=null, ckTimer=null;
+  function ckDefault(){ var id=0, it=[]; CK_DEF.forEach(function(g){ g[1].forEach(function(t){ it.push({id:'d'+(id++),g:g[0],t:t,done:false}); }); }); return {items:it}; }
+  function ckLocal(){ try{ return JSON.parse(localStorage.getItem('xt_ck')||'null'); }catch(e){ return null; } }
+  function ckSave(){
+    try{ localStorage.setItem('xt_ck',JSON.stringify(CK)); }catch(e){}
+    clearTimeout(ckTimer); $('ckSync').textContent='Đang lưu…';
+    ckTimer=setTimeout(function(){ whenDB(function(){ window.WeddingDB.checklist.save({items:CK.items}).then(function(){ $('ckSync').textContent='Đã lưu, máy dâu và máy rể xem chung một checklist.'; }).catch(function(){ $('ckSync').textContent='Chỉ lưu được trên máy này (chưa kết nối được máy chủ).'; }); }); },600);
+  }
+  function ckRender(){
+    var days=Math.ceil((WEDDING-new Date())/864e5), done=CK.items.filter(function(x){return x.done;}).length;
+    $('ckStats').innerHTML=card('Còn lại',days>0?days:0,'ngày')+card('Đã xong',done,'/ '+CK.items.length);
+    $('ckBar').style.width=(CK.items.length?Math.round(done*100/CK.items.length):0)+'%';
+    $('ckList').innerHTML=CK_DEF.map(function(g){
+      var its=CK.items.filter(function(x){return x.g===g[0];}), d=its.filter(function(x){return x.done;}).length;
+      return '<div class="ck-g"><div class="ck-gh">'+esc(g[0])+'<small>'+d+'/'+its.length+'</small></div>'+
+        its.map(function(x){ return '<div class="ck-i'+(x.done?' done':'')+'"><input type="checkbox" id="ck_'+x.id+'" data-id="'+x.id+'"'+(x.done?' checked':'')+'><label for="ck_'+x.id+'">'+esc(x.t)+'</label><button class="qk-del" data-x="'+x.id+'">✕</button></div>'; }).join('')+
+        '<div class="ck-add"><input type="text" placeholder="Thêm việc…" maxlength="120" data-g="'+esc(g[0])+'"><button class="qk-mini" data-add="'+esc(g[0])+'">Thêm</button></div></div>';
+    }).join('');
+    $('ckList').querySelectorAll('input[type=checkbox]').forEach(function(c){ c.onchange=function(){ CK.items.forEach(function(x){ if(x.id===c.dataset.id) x.done=c.checked; }); ckRender(); ckSave(); }; });
+    $('ckList').querySelectorAll('[data-x]').forEach(function(b){ b.onclick=function(){ CK.items=CK.items.filter(function(x){return x.id!==b.dataset.x;}); ckRender(); ckSave(); }; });
+    function add(g){ var inp=$('ckList').querySelector('input[data-g="'+g+'"]'); var t=inp.value.trim(); if(!t) return; CK.items.push({id:'u'+Date.now(),g:g,t:t,done:false}); ckRender(); ckSave(); }
+    $('ckList').querySelectorAll('[data-add]').forEach(function(b){ b.onclick=function(){ add(b.dataset.add); }; });
+    $('ckList').querySelectorAll('.ck-add input').forEach(function(i){ i.onkeydown=function(e){ if(e.key==='Enter') add(i.dataset.g); }; });
+  }
+  function ckLoad(){
+    if(CK) return; CK=ckLocal()||ckDefault(); ckRender();
+    whenDB(function(){ window.WeddingDB.checklist.load().then(function(d){ if(d&&d.items){ CK={items:d.items}; try{localStorage.setItem('xt_ck',JSON.stringify(CK));}catch(e){} ckRender(); $('ckSync').textContent='Đã đồng bộ.'; } }).catch(function(){ $('ckSync').textContent='Chỉ lưu được trên máy này (chưa kết nối được máy chủ).'; }); });
+  }
+  window.addEventListener('qk-tab', function(e){ if(e.detail==='ck') ckLoad(); if(e.detail==='gf'||e.detail==='ty') fillNames(); });
+})();
+
 </script>
 
 </body>
