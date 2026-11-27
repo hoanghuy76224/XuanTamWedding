@@ -1767,12 +1767,14 @@
           <div class="qk-chips" id="tyTone" style="margin:0 2px 12px"></div>
           <div id="tyFb"></div>
           <div class="qk-h" style="margin-top:18px">Tin nhắn cảm ơn riêng từng khách (Zalo, Messenger)</div>
+          <div class="qk-note" style="margin-bottom:8px">Chọn xưng hô cho đúng vai vế, rồi gõ cách gọi khách.</div>
+          <div class="qk-chips" id="tyRole" style="margin:0 2px 12px"></div>
           <div class="qk-invite">
             <div class="row">
-              <input type="text" id="tyGuest" list="tyGuests" placeholder="Tên khách (vd: anh Minh)" maxlength="80">
+              <input type="text" id="tyGuest" list="tyGuests" placeholder="Cách gọi khách" maxlength="80">
               <datalist id="tyGuests"></datalist>
             </div>
-            <div class="qk-note">Gợi ý tên lấy từ danh sách khách đã xác nhận.</div>
+            <div class="qk-note">Gõ đúng cách gọi trong tin nhắn, vd cô Hoa, anh Minh, Tuấn. Mẫu 1 cho khách đã đến dự, mẫu 2 cho khách gửi quà mà không đến được.</div>
           </div>
           <div id="tyMsg"></div>
         </div>
@@ -2146,11 +2148,44 @@
       '26.12.2026 ✨ Cảm ơn tất cả mọi người vì một ngày thật trọn vẹn. Xuân & Tam'
     ]
   };
-  var MSG=[
-    'Dạ con chào {ten}. Vợ chồng con cảm ơn {ten} đã dành thời gian đến dự đám cưới của tụi con. Lúc đón khách đông quá con chưa kịp nói chuyện được nhiều, có gì thiếu sót mong {ten} bỏ qua cho tụi con nha. Con chúc {ten} và gia đình nhiều sức khoẻ ạ!',
-    'Cảm ơn {ten} đã tới chung vui với tụi mình nha! Có {ten} hôm đó vui hẳn luôn. Hôm nào rảnh tụi mình mời cà phê nói chuyện cho đã nhé 💛',
-    'Gửi {ten}, tụi mình nhận được quà và lời chúc rồi, cảm ơn nhiều lắm nha. Tiếc là {ten} không tới được, hẹn dịp gần nhất gặp nhau nhé!'
-  ];
+  var MSG={
+ "Ông bà, cô chú (xưng con)": {
+  "def": "cô chú",
+  "t": [
+   "Dạ con chào {ten}. Vợ chồng con xin cảm ơn {ten} đã dành thời gian đến dự đám cưới của tụi con. Hôm đó khách đông, tụi con chưa kịp mời {ten} được chu đáo, có gì thiếu sót mong {ten} bỏ qua cho tụi con. Con kính chúc {ten} và gia đình luôn mạnh khoẻ, bình an ạ!",
+   "Dạ con chào {ten}. Tụi con đã nhận được quà và lời chúc của {ten} rồi ạ, vợ chồng con quý lắm. Tiếc là hôm đó {ten} không ghé được, hôm nào tụi con xin phép qua thăm {ten} ạ. Con chúc {ten} nhiều sức khoẻ!"
+  ]
+ },
+ "Họ hàng lớn (xưng cháu)": {
+  "def": "bác",
+  "t": [
+   "Dạ cháu chào {ten}. Vợ chồng cháu cảm ơn {ten} đã đến chung vui trong ngày cưới của tụi cháu. Hôm đó bận bịu quá, cháu chưa kịp ngồi hỏi thăm {ten} được nhiều, có gì sơ suất mong {ten} thông cảm cho tụi cháu. Cháu chúc {ten} và cả nhà luôn mạnh khoẻ ạ!",
+   "Dạ cháu chào {ten}. Tụi cháu nhận được quà và lời chúc của {ten} rồi ạ, cảm ơn {ten} nhiều lắm. Dịp gần nhất vợ chồng cháu sẽ qua thăm {ten} ạ!"
+  ]
+ },
+ "Anh chị (xưng em)": {
+  "def": "anh chị",
+  "t": [
+   "Em cảm ơn {ten} đã đến chung vui với vợ chồng em nha. Hôm đó lu bu quá em chưa kịp ngồi nói chuyện với {ten} được, có gì sơ suất {ten} thông cảm cho em nhé. Chúc {ten} và gia đình luôn vui khoẻ!",
+   "Em nhận được quà với lời chúc của {ten} rồi, cảm ơn {ten} nhiều lắm. Tiếc là hôm đó {ten} không ghé được, hẹn bữa nào vợ chồng em mời {ten} đi cà phê nha!"
+  ]
+ },
+ "Bạn bè (xưng mình)": {
+  "def": "bạn",
+  "t": [
+   "Cảm ơn {ten} đã tới chung vui với tụi mình nha! Có {ten} hôm đó vui hẳn luôn. Hôm nào rảnh tụi mình mời cà phê nói chuyện cho đã nhé 💛",
+   "Tụi mình nhận được quà và lời chúc của {ten} rồi, cảm ơn nhiều lắm nha. Tiếc là {ten} không tới được, hẹn dịp gần nhất gặp nhau nhé!"
+  ]
+ },
+ "Em (xưng anh chị)": {
+  "def": "em",
+  "t": [
+   "Anh chị cảm ơn {ten} đã đến chung vui với anh chị nha. Hôm đó đông quá chưa nói chuyện được với {ten} nhiều, bữa nào anh chị rủ {ten} đi ăn bù nha!",
+   "Anh chị nhận được quà với lời chúc của {ten} rồi, cảm ơn {ten} nhiều nha. Tiếc là {ten} không ghé được, hẹn gặp {ten} sớm nhé!"
+  ]
+ }
+};
+  var role=Object.keys(MSG)[0];
   var tone='Trang trọng';
   function renderTy(){
     $('tyTone').innerHTML=Object.keys(FB).map(function(k){ return '<span class="qk-chip'+(k===tone?' on':'')+'" data-k="'+k+'">'+k+'</span>'; }).join('');
@@ -2159,13 +2194,17 @@
     renderMsg();
   }
   function renderMsg(){
-    var name=$('tyGuest').value.trim()||'anh/chị';
-    var arr=MSG.map(function(t){ return t.split('{ten}').join(name); });
+    $('tyRole').innerHTML=Object.keys(MSG).map(function(k){ return '<span class="qk-chip'+(k===role?' on':'')+'" data-r="'+esc(k)+'">'+esc(k)+'</span>'; }).join('');
+    $('tyGuest').placeholder='Cách gọi khách (vd: '+MSG[role].def+' Hoa)';
+    var name=$('tyGuest').value.trim()||MSG[role].def;
+    var arr=MSG[role].t.map(function(t){ return t.split('{ten}').join(name); });
+    arr=arr.map(function(t){ return t.charAt(0).toUpperCase()+t.slice(1); });
     $('tyMsg').innerHTML=arr.map(function(t,i){ return '<div class="ty-card"><div class="tx">'+esc(t)+'</div><div class="ft"><button class="qk-mini" data-m="'+i+'">Chép</button></div></div>'; }).join('');
     $('tyMsg').querySelectorAll('[data-m]').forEach(function(b){ b.onclick=function(){ copyText(arr[+b.dataset.m],b,'Chép'); }; });
   }
   $('tyTone').addEventListener('click', function(e){ var c=e.target.closest('.qk-chip'); if(c){ tone=c.dataset.k; renderTy(); } });
   $('tyGuest').addEventListener('input', renderMsg);
+  $('tyRole').addEventListener('click', function(e){ var c=e.target.closest('.qk-chip'); if(c){ role=c.dataset.r; renderMsg(); } });
   renderTy();
 
   /* ================= CHECKLIST ================= */
