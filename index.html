@@ -1521,7 +1521,13 @@
       async list(key){ const snap = await getDocs(this.col(key)); const out=[]; snap.forEach(x=>out.push({id:x.id, ...x.data()})); return out; },
       async add(key, d){ return addDoc(this.col(key), Object.assign({}, d, {createdAt: serverTimestamp()})); },
       async update(key, id, d){ return updateDoc(doc(db, "giftbook_xuantam", key, "entries", id), d); },
-      async remove(key, id){ return deleteDoc(doc(db, "giftbook_xuantam", key, "entries", id)); }
+      async remove(key, id){ return deleteDoc(doc(db, "giftbook_xuantam", key, "entries", id)); },
+      async put(key, id, d){ return setDoc(doc(db, "giftbook_xuantam", key, "entries", id), d); },
+      async exists(key){ return (await getDoc(doc(db, "giftbook_xuantam", key))).exists(); },
+      async mark(key){ return setDoc(doc(db, "giftbook_xuantam", key), {createdAt: serverTimestamp()}); },
+      async unmark(key){ return deleteDoc(doc(db, "giftbook_xuantam", key)); },
+      async changed(){ return (await getDoc(doc(db, "giftbook_xuantam_meta", "state"))).exists(); },
+      async setChanged(){ return setDoc(doc(db, "giftbook_xuantam_meta", "state"), {changed: true, at: serverTimestamp()}); }
     },
     checklist: {
       async load(){ const s = await getDoc(doc(db, "checklist_xuantam", "main")); return s.exists() ? s.data() : null; },
@@ -1740,6 +1746,17 @@
             <div class="qk-chips" id="gfSideF" style="margin:0 2px 12px"><span class="qk-chip on" data-f="">Tất cả</span><span class="qk-chip" data-f="Nhà gái">Nhà gái</span><span class="qk-chip" data-f="Nhà trai">Nhà trai</span><span class="qk-chip" data-f="Bạn chung">Bạn chung</span></div>
             <div class="qk-note" id="gfCnt" style="margin-bottom:10px"></div>
             <div id="gfList"></div>
+            <div class="qk-invite" style="margin-top:16px">
+              <h3>Đổi mật khẩu sổ</h3>
+              <p>Đổi xong thì máy nào cũng phải nhập mật khẩu mới, mật khẩu cũ hết dùng được. Dữ liệu được chuyển sang nguyên vẹn.</p>
+              <div class="gf-f">
+                <input type="password" id="gfOld" placeholder="Mật khẩu hiện tại" autocomplete="off">
+                <input type="password" id="gfNew" placeholder="Mật khẩu mới (ít nhất 6 ký tự)" autocomplete="new-password">
+                <input type="password" id="gfNew2" placeholder="Nhập lại mật khẩu mới" autocomplete="new-password">
+                <div><button class="qk-btn solid" id="gfChg">Đổi mật khẩu</button></div>
+                <div class="qk-note" id="gfChgMsg"></div>
+              </div>
+            </div>
             <div class="qk-note"><a href="#" id="gfLockBtn" style="color:#b23a52">Khoá sổ trên máy này</a></div>
           </div>
         </div>
@@ -1991,8 +2008,18 @@
   async function unlock(){
     var pw=$('gfPw').value; $('gfPwErr').textContent='';
     if(!pw) return;
-    if(await sha('xt-gift-verify|'+pw)!==GIFT_VERIFY){ $('gfPwErr').textContent='Mật khẩu sổ chưa đúng.'; return; }
-    KEY=(await sha('xt-gift-key|'+pw)).slice(0,40);
+    var k=(await sha('xt-gift-key|'+pw)).slice(0,40), G=null;
+    $('gfPwBtn').disabled=true;
+    try{
+      await new Promise(function(r){ whenDB(r); }); G=window.WeddingDB.gift;
+      if(!(await G.exists(k))){
+        var initial=(await sha('xt-gift-verify|'+pw))===GIFT_VERIFY;
+        if(!initial || await G.changed()){ $('gfPwErr').textContent='Mật khẩu sổ chưa đúng.'; return; }
+        await G.mark(k);
+      }
+    }catch(err){ $('gfPwErr').textContent='Chưa kết nối được: '+err.message; return; }
+    finally{ $('gfPwBtn').disabled=false; }
+    KEY=k;
     try{ sessionStorage.setItem('xt_giftkey',KEY); }catch(e){}
     $('gfPw').value=''; openBook();
   }
@@ -2063,6 +2090,32 @@
     if(!confirm('Xoá phong bì của "'+(g&&g.name||'')+'"? Không khôi phục được.')) return;
     window.WeddingDB.gift.remove(KEY,id).then(loadGifts).catch(function(err){ alert('Xoá không được: '+err.message); });
   }
+  $('gfChg').addEventListener('click', async function(){
+    var o=$('gfOld').value, n1=$('gfNew').value, n2=$('gfNew2').value, msg=$('gfChgMsg'), b=this;
+    msg.style.color='#c0364f';
+    if(n1.length<6){ msg.textContent='Mật khẩu mới cần ít nhất 6 ký tự.'; return; }
+    if(n1!==n2){ msg.textContent='Hai lần nhập mật khẩu mới chưa khớp.'; return; }
+    var oldK=(await sha('xt-gift-key|'+o)).slice(0,40);
+    if(oldK!==KEY){ msg.textContent='Mật khẩu hiện tại chưa đúng.'; return; }
+    var newK=(await sha('xt-gift-key|'+n1)).slice(0,40);
+    if(newK===KEY){ msg.textContent='Mật khẩu mới trùng mật khẩu cũ.'; return; }
+    if(!confirm('Đổi mật khẩu sổ tiền mừng? Nhớ báo mật khẩu mới cho người cùng quản lý sổ.')) return;
+    var G=window.WeddingDB.gift; b.disabled=true; msg.style.color='#8c7a78'; msg.textContent='Đang chuyển dữ liệu…';
+    try{
+      if(await G.exists(newK)){ msg.style.color='#c0364f'; msg.textContent='Mật khẩu này không dùng được, chọn mật khẩu khác.'; return; }
+      var list=await G.list(KEY);
+      await G.mark(newK);
+      for(var i=0;i<list.length;i++){ var d=Object.assign({},list[i]); var id=d.id; delete d.id; await G.put(newK,id,d); }
+      try{ if(!(await G.changed())) await G.setChanged(); }catch(e){}
+      for(var j=0;j<list.length;j++){ await G.remove(KEY,list[j].id); }
+      await G.unmark(KEY);
+      KEY=newK; try{ sessionStorage.setItem('xt_giftkey',KEY); }catch(e){}
+      $('gfOld').value=$('gfNew').value=$('gfNew2').value='';
+      msg.style.color='#0b7a55'; msg.textContent='Đã đổi mật khẩu, chuyển '+list.length+' phong bì sang.';
+      loadGifts();
+    }catch(err){ msg.style.color='#c0364f'; msg.textContent='Chưa đổi được: '+err.message+'. Dữ liệu cũ vẫn còn, mật khẩu cũ vẫn dùng được.'; }
+    finally{ b.disabled=false; }
+  });
   $('gfSearch').addEventListener('input', function(){ q=this.value.trim().toLowerCase(); renderGifts(); });
   $('gfSideF').addEventListener('click', function(e){ var c=e.target.closest('.qk-chip'); if(!c) return; sideF=c.dataset.f; $('gfSideF').querySelectorAll('.qk-chip').forEach(function(x){x.classList.toggle('on',x===c);}); renderGifts(); });
   $('gfCsv').addEventListener('click', function(){
