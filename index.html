@@ -2092,18 +2092,27 @@
     if(!confirm('Xoá phong bì của "'+(g&&g.name||'')+'"? Không khôi phục được.')) return;
     window.WeddingDB.gift.remove(KEY,id).then(loadGifts).catch(function(err){ alert('Xoá không được: '+err.message); });
   }
+  var chgArmed=false, chgTimer=null;
   $('gfChg').addEventListener('click', async function(){
     var o=$('gfOld').value, n1=$('gfNew').value, n2=$('gfNew2').value, msg=$('gfChgMsg'), b=this;
     msg.style.color='#c0364f';
-    if(n1.length<6){ msg.textContent='Mật khẩu mới cần ít nhất 6 ký tự.'; return; }
-    if(n1!==n2){ msg.textContent='Hai lần nhập mật khẩu mới chưa khớp.'; return; }
-    var oldK=(await sha('xt-gift-key|'+o)).slice(0,40);
-    if(oldK!==KEY){ msg.textContent='Mật khẩu hiện tại chưa đúng.'; return; }
-    var newK=(await sha('xt-gift-key|'+n1)).slice(0,40);
-    if(newK===KEY){ msg.textContent='Mật khẩu mới trùng mật khẩu cũ.'; return; }
-    if(!confirm('Đổi mật khẩu sổ tiền mừng? Nhớ báo mật khẩu mới cho người cùng quản lý sổ.')) return;
-    var G=window.WeddingDB.gift; b.disabled=true; msg.style.color='#8c7a78'; msg.textContent='Đang chuyển dữ liệu…';
     try{
+      if(!KEY){ msg.textContent='Sổ đang khoá, hãy mở khoá lại bằng mật khẩu hiện tại.'; return; }
+      if(!o){ msg.textContent='Nhập mật khẩu hiện tại.'; return; }
+      if(n1.length<6){ msg.textContent='Mật khẩu mới cần ít nhất 6 ký tự.'; return; }
+      if(n1!==n2){ msg.textContent='Hai lần nhập mật khẩu mới chưa khớp.'; return; }
+      var oldK=(await sha('xt-gift-key|'+o)).slice(0,40);
+      if(oldK!==KEY){ msg.textContent='Mật khẩu hiện tại chưa đúng.'; return; }
+      var newK=(await sha('xt-gift-key|'+n1)).slice(0,40);
+      if(newK===KEY){ msg.textContent='Mật khẩu mới trùng mật khẩu cũ.'; return; }
+      if(!chgArmed){
+        chgArmed=true; b.textContent='Bấm lần nữa để xác nhận đổi';
+        msg.style.color='#8c7a78'; msg.textContent='Đổi xong nhớ báo mật khẩu mới cho người cùng quản lý sổ.';
+        clearTimeout(chgTimer); chgTimer=setTimeout(function(){ chgArmed=false; b.textContent='Đổi mật khẩu'; },8000);
+        return;
+      }
+      chgArmed=false; clearTimeout(chgTimer);
+      var G=window.WeddingDB.gift; b.disabled=true; msg.style.color='#8c7a78'; msg.textContent='Đang chuyển dữ liệu…';
       if(await G.exists(newK)){ msg.style.color='#c0364f'; msg.textContent='Mật khẩu này không dùng được, chọn mật khẩu khác.'; return; }
       var list=await G.list(KEY);
       await G.mark(newK);
@@ -2115,8 +2124,8 @@
       $('gfOld').value=$('gfNew').value=$('gfNew2').value='';
       msg.style.color='#0b7a55'; msg.textContent='Đã đổi mật khẩu, chuyển '+list.length+' phong bì sang.';
       loadGifts();
-    }catch(err){ msg.style.color='#c0364f'; msg.textContent='Chưa đổi được: '+err.message+'. Dữ liệu cũ vẫn còn, mật khẩu cũ vẫn dùng được.'; }
-    finally{ b.disabled=false; }
+    }catch(err){ msg.style.color='#c0364f'; msg.textContent='Chưa đổi được: '+((err&&err.message)||err)+'. Dữ liệu cũ vẫn còn, mật khẩu cũ vẫn dùng được.'; }
+    finally{ b.disabled=false; b.textContent='Đổi mật khẩu'; }
   });
   $('gfSearch').addEventListener('input', function(){ q=this.value.trim().toLowerCase(); renderGifts(); });
   $('gfSideF').addEventListener('click', function(e){ var c=e.target.closest('.qk-chip'); if(!c) return; sideF=c.dataset.f; $('gfSideF').querySelectorAll('.qk-chip').forEach(function(x){x.classList.toggle('on',x===c);}); renderGifts(); });
