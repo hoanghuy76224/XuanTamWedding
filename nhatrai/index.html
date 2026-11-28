@@ -8,7 +8,7 @@
 <meta property="og:image" content="https://xuantamwedding.khunglongcon.com/nhatrai/assets/wide.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --olive-deep:#4b5733;
@@ -297,12 +297,17 @@ section{position:relative}
   font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:#fff;margin-bottom:1.2rem;
 }
 .event-card .ev-date{
-  display:flex;align-items:center;justify-content:center;gap:1rem;margin-bottom:1rem;
+  display:grid;justify-items:center;gap:.55rem;margin-bottom:1rem;
 }
-.event-card .ev-day{
-  font-family:'Playfair Display',serif;font-size:2.8rem;line-height:1;color:#fff;
+.event-card .ev-weekday{
+  font-size:.9rem;font-weight:500;letter-spacing:.08em;color:rgba(255,255,255,.9);
 }
-.event-card .ev-col{text-align:left;font-size:.7rem;letter-spacing:.12em;line-height:1.5;color:rgba(255,255,255,.85)}
+.event-card .ev-date-number{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.75rem,7.3vw,3rem);
+  font-weight:700;font-variant-numeric:lining-nums tabular-nums;
+  line-height:1.15;color:#fff;white-space:nowrap;
+}
 .event-card .ev-time{
   font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold);
   letter-spacing:.16em;margin-top:.4rem;
@@ -536,8 +541,6 @@ section{position:relative}
 .event-card{transition:transform .5s ease, box-shadow .5s ease, border-color .5s ease;}
 .event-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.32);
   box-shadow:0 16px 40px rgba(0,0,0,.28);}
-.event-card .ev-day{display:inline-block;transition:transform .5s ease}
-.event-card:hover .ev-day{transform:scale(1.06)}
 
 /* countdown number flip */
 .cd-num{position:relative;display:inline-block}
@@ -739,7 +742,7 @@ section{position:relative}
       </div>
     </div>
     <div class="half reveal d1">
-      <img loading="lazy" alt="Cô dâu Thanh Xuân cầm hoa bên chú rể Văn Tam" src="assets/bouquet.webp">
+      <img loading="lazy" alt="Cô dâu Thanh Xuân cầm bó hoa bên chú rể Văn Tam" src="assets/close.webp">
       <div class="caption">
         <div class="role">Starring · The Bride</div>
         <div class="full">Nguyễn Thanh Xuân</div>
@@ -761,8 +764,8 @@ section{position:relative}
       <span class="tag">Thánh lễ hôn phối</span>
       <div class="ev-title">Lễ Thành Hôn</div>
       <div class="ev-date">
-        <div class="ev-day">01</div>
-        <div class="ev-col">THỨ SÁU<br>THÁNG 01<br>2027</div>
+        <div class="ev-weekday">Thứ Sáu</div>
+        <time class="ev-date-number" datetime="2027-01-01">01 . 01 . 2027</time>
       </div>
       <div class="ev-time">17:00</div>
       <div class="ev-place">
@@ -779,8 +782,8 @@ section{position:relative}
       <span class="tag">Tiệc chung vui</span>
       <div class="ev-title">Tiệc Cưới</div>
       <div class="ev-date">
-        <div class="ev-day">02</div>
-        <div class="ev-col">THỨ BẢY<br>THÁNG 01<br>2027</div>
+        <div class="ev-weekday">Thứ Bảy</div>
+        <time class="ev-date-number" datetime="2027-01-02">02 . 01 . 2027</time>
       </div>
       <div class="ev-time">Đón khách 11:00 · Khai tiệc 11:30</div>
       <div class="ev-place">
@@ -819,7 +822,6 @@ section{position:relative}
       <div class="g-item reveal d1"><img loading="lazy" alt="Văn Tam và Thanh Xuân" src="assets/standing.webp"></div>
       <div class="g-item reveal d2"><img loading="lazy" alt="Văn Tam và Thanh Xuân" src="assets/close.webp"></div>
       <div class="g-item reveal d1"><img loading="lazy" alt="Văn Tam và Thanh Xuân" src="assets/dance.webp"></div>
-      <div class="g-item reveal d2"><img loading="lazy" alt="Văn Tam và Thanh Xuân" src="assets/bouquet.webp"></div>
       <div class="g-item reveal d1"><img loading="lazy" alt="Văn Tam và Thanh Xuân" src="assets/hero.webp"></div>
 
     </div>
@@ -832,7 +834,7 @@ section{position:relative}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C8 6 8 12 12 22 16 12 16 6 12 2z"/></svg>
       <span class="l"></span>
     </div>
-    <div class="thanks">Cảm ơn vì đã là một phần trong ngày hạnh phúc của chúng tôi.</div>
+    <div class="thanks">Cảm ơn quý khách vì đã trở thành một phần quan trọng trong buổi tiệc này.</div>
     <div class="f-names">Văn Tam <span class="f-amp">&amp;</span> Thanh Xuân</div>
     <div class="f-date">02 · 01 · 2027</div>
   </footer>
