@@ -827,6 +827,37 @@ section{position:relative}
     </div>
   </section>
 
+  <!-- RSVP -->
+  <section class="rsvp" id="rsvp">
+    <div class="eyebrow reveal">Xác nhận tham dự</div>
+    <h2 class="reveal d1">Bạn sẽ đến chứ?</h2>
+    <p class="reveal d2">Bạn báo giúp chúng mình có đến được không và đi mấy người, để chúng mình chuẩn bị chỗ ngồi chu đáo nhé.</p>
+    <div class="rsvp-form reveal d2" id="rsvpForm">
+      <div class="field">
+        <label for="rName">Tên của bạn</label>
+        <input id="rName" type="text" maxlength="40" placeholder="Vd: Gia đình cô Tư" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Bạn có đến được không?</label>
+        <div class="attend-toggle" id="rVote">
+          <button type="button" data-v="yes">Mình sẽ đến</button>
+          <button type="button" data-v="no">Tiếc quá, mình bận</button>
+        </div>
+      </div>
+      <div class="field" id="rGuestRow">
+        <label>Số người đi cùng (tính cả bạn)</label>
+        <div class="count-stepper"><button type="button" id="rMinus">−</button><span class="cval" id="rNum">1</span><button type="button" id="rPlus">+</button></div>
+      </div>
+      <div class="field">
+        <label for="rMsg">Lời chúc</label>
+        <textarea id="rMsg" maxlength="280" placeholder="Chúc hai bạn trăm năm hạnh phúc..."></textarea>
+      </div>
+      <input type="text" id="rHp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+      <button class="rsvp-submit" id="rSubmit" type="button">Gửi xác nhận</button>
+      <div class="rsvp-msg" id="rNote"></div>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer class="foot">
     <div class="divider-leaf" style="margin-bottom:2.2rem">
@@ -845,7 +876,7 @@ section{position:relative}
 // ---- custom guest name via ?guest= ----
 (function(){
   var params=new URLSearchParams(window.location.search);
-  var g=params.get('guest');
+  var g=params.get('guest')||params.get('to');
   if(g && g.trim()){
     document.getElementById('guestName').textContent=g.trim();
   }else{
@@ -962,6 +993,81 @@ function initReveals(){
     document.addEventListener('touchstart',once);
   });
 })();
+</script>
+
+<script src="../invite-links.js"></script>
+<script>
+/* ===== Xác nhận tham dự: dùng chung collection rsvp_xuantam với trang chính ===== */
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var nameEl=$('rName'),msgEl=$('rMsg'),hpEl=$('rHp'),btn=$('rSubmit'),note=$('rNote');
+  var attend='',guests=1,sending=false,invitedAs='',pending=false,failed=false;
+  var params=new URLSearchParams(location.search);
+  function setNote(t,ok){note.textContent=t;note.className='rsvp-msg '+(ok?'ok':'err');}
+  function applyGuest(v){
+    invitedAs=String(v||'').trim().slice(0,80);
+    if(!invitedAs) return;
+    if(!nameEl.value) nameEl.value=invitedAs.slice(0,40);
+    $('guestName').textContent=invitedAs;
+  }
+  var direct=params.get('guest')||params.get('to');
+  if(direct) applyGuest(direct);
+  else if(params.get('k') && window.InviteLinks){
+    pending=true; btn.disabled=true;
+    window.InviteLinks.resolve(params.get('k')).then(applyGuest).catch(function(){failed=true;})
+      .finally(function(){pending=false;btn.disabled=false;});
+  }
+  $('rVote').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    attend=b.dataset.v;
+    this.querySelectorAll('button').forEach(function(x){x.classList.toggle('sel',x===b);});
+    $('rGuestRow').style.display=attend==='no'?'none':'';
+  });
+  $('rMinus').onclick=function(){guests=Math.max(1,guests-1);$('rNum').textContent=guests;};
+  $('rPlus').onclick=function(){guests=Math.min(10,guests+1);$('rNum').textContent=guests;};
+  function whenDB(cb){ if(window.WeddingDB) cb(); else window.addEventListener('weddingdb-ready',cb,{once:true}); }
+  btn.addEventListener('click',function(){
+    if(sending||pending||hpEl.value) return;
+    var name=(nameEl.value||'').trim(), msg=(msgEl.value||'').trim();
+    if(name.length<2){setNote('Bạn nhập tên giúp mình nha',false);return;}
+    if(!attend){setNote('Bạn chọn giúp mình có đến được không nha',false);return;}
+    sending=true; btn.disabled=true; setNote('Đang gửi...',true);
+    whenDB(function(){
+      window.WeddingDB.submit({
+        guestName:name, invitedAs:invitedAs, side:'Nhà trai',
+        attend:attend==='yes'?'Có tham dự':'Không tham dự',
+        numGuest:attend==='yes'?guests:0, wish:msg, lang:'vi'
+      }).then(function(){
+        $('rsvpForm').innerHTML='<div class="rsvp-done"><div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></div><h3>'+(attend==='yes'?'Cảm ơn bạn!':'Cảm ơn lời chúc của bạn')+'</h3><p>'+(attend==='yes'?'Hẹn gặp bạn trong ngày vui 💛':'Chúng mình đã nhận được phản hồi của bạn 💛')+'</p></div>';
+      }).catch(function(e){console.error(e);setNote('Gửi chưa được, thử lại sau nhé',false);sending=false;btn.disabled=false;});
+    });
+  });
+})();
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  const app = initializeApp({
+    apiKey: "AIzaSyDKojhw5-SFWukGSN_oSjw5vxJngrfIogo",
+    authDomain: "vo-iu-dino-848d2.firebaseapp.com",
+    projectId: "vo-iu-dino-848d2",
+    storageBucket: "vo-iu-dino-848d2.firebasestorage.app",
+    messagingSenderId: "879023470388",
+    appId: "1:879023470388:web:ecc9128f6f280b26249761"
+  });
+  const db = getFirestore(app);
+  window.WeddingDB = {
+    async submit(d){
+      return addDoc(collection(db, "rsvp_xuantam"), {
+        guestName: d.guestName || "", invitedAs: d.invitedAs || "", attend: d.attend || "",
+        side: d.side || "", numGuest: d.numGuest || 0, wish: d.wish || "", lang: d.lang || "vi",
+        createdAt: serverTimestamp()
+      });
+    }
+  };
+  window.dispatchEvent(new Event("weddingdb-ready"));
 </script>
 
 </body>
